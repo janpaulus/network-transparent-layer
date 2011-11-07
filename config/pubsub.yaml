@@ -6,4 +6,4 @@ interaction: "pub-sub"
 transport: "tcp"
 	hostname: "localhost"
 	port: "5555"	 
-				 
+distribution: ""				 
