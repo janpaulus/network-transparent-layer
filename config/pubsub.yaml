@@ -1,0 +1,9 @@
+---  
+connection: "connection"
+port: ""
+connector: "connector"
+interaction: "pub-sub" 
+transport: "tcp"
+	hostname: "localhost"
+	port: "5555"	 
+				 
