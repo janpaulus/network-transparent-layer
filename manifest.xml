@@ -10,6 +10,8 @@
   <url>https://github.com/janpaulus/network-transparent-layer</url>
 	<rosdep name="boost" />
   <depend package="zmq"/>
+  <depend package="common_rosdeps" />
+  <rosdep name="yaml-cpp" />
 </package>
 
 

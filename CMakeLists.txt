@@ -57,4 +57,9 @@ src/testPublisher.c
 
 ADD_EXECUTABLE(testpub ${SOURCES_1} )
 
+ADD_EXECUTABLE(yaml_test src/yaml_test.cpp )
+
+target_link_libraries(yaml_test yaml-cpp)
+
+
 

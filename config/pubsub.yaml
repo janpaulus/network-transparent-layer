@@ -1,9 +1,10 @@
----  
-connection: "connection"
-port: ""
-connector: "connector"
-interaction: "pub-sub" 
-transport: "tcp"
-	hostname: "localhost"
-	port: "5555"	 
-distribution: ""				 
+- connection: connection
+  port: 2342
+  connector: connector
+  interaction: pub-sub 
+  transport:
+    - protocol: tcp
+      hostname: localhost
+      port: 5555 
+  distribution: dsfa
+
