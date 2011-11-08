@@ -1,24 +1,49 @@
-#Searches system for "unicap" installation
-# when successfully completed
-# <NAME>_FOUND
-# <NAME>_INCLUDE_DIRS or <NAME>_INCLUDES
-# <NAME>_LIBRARIES or <NAME>_LIBRARIES or <NAME>_LIBS
-# <NAME>_DEFINITIONS
-# will be set and available for other cmake files
+# - Try to find ZMQ
+# Once done this will define
+#
+#  ZMQ_FOUND - ZMQ found
+#  ZMQ_INCLUDE_DIR - the ZMQ include directory
+#  ZMQ_LIBRARY_DIR - ZMQ lib directory
+#
 
+SET(ZMQLIB "zmq")
 
-INCLUDE(FindPkgConfig)
-PKG_CHECK_MODULES(zmq REQUIRED libzmq)
+FIND_PATH(ZMQ_INCLUDE_DIR NAMES zmq.h
+  PATHS
+  $ENV{ROBOTPKG_BASE}/include
+	${zmq_PACKAGE_PATH}/install/include
+  ENV CPATH
+  /usr/include/
+  /usr/local/include/
+  /opt/local/include/
+  NO_DEFAULT_PATH
+)
 
-FIND_PATH(zmq_INCLUDE_DIR_NAME zmq.h PATHS $ENV{ROBOTPKG_BASE}/include /usr/local/include/zmq /usr/local/include/ HINTS  ${zmq_INCLUDE_DIRS})
-FIND_LIBRARY(zmq_LIB_NAME zmq libzmq PATHS /usr/local/lib/ /usr/lib/ $ENV{ROBOTPKG_BASE}/lib HINTS ${zmq_LIBRARY_DIRS})
+#MARK_AS_ADVANCED("ZMQ_INCLUDE_DIR: "${ZMQ_INCLUDE_DIR})
 
-IF(zmq_INCLUDE_DIR_NAME AND zmq_LIB_NAME)
-    SET(zmq_FOUND TRUE)
-    SET(zmq_LIBRARIES ${zmq_LIB_NAME})
-    SET(zmq_INCLUDES  ${zmq_INCLUDE_DIR_NAME})
-ENDIF(zmq_INCLUDE_DIR_NAME AND zmq_LIB_NAME)
+FIND_LIBRARY(ZMQ_LIBRARY_TMP NAMES ${ZMQLIB} "ZMQLibraries"
+  PATHS
+  $ENV{ROBOTPKG_BASE}/lib
+	${zmq_PACKAGE_PATH}/install/lib
+  ENV LD_LIBRARY_PATH
+  ENV LIBRARY_PATH
+  /usr/lib
+  /usr/local/lib
+  /opt/local/lib
+  NO_DEFAULT_PATH
+)
 
-INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(zmq DEFAULT_MSG zmq_INCLUDE_DIR_NAME zmq_LIB_NAME)
+IF(ZMQ_LIBRARY_TMP)
+  GET_FILENAME_COMPONENT( ZMQ_LIBRARY_DIR ${ZMQ_LIBRARY_TMP} PATH )
+ENDIF(ZMQ_LIBRARY_TMP)
+
+IF(ZMQ_INCLUDE_DIR AND ZMQ_LIBRARY_DIR)
+  SET(ZMQ_FOUND TRUE)
+ENDIF(ZMQ_INCLUDE_DIR AND ZMQ_LIBRARY_DIR)
+
+# show the ZMQ_INCLUDE_DIR and ZMQ_LIBRARY_DIR variables only in the advanced view
+IF(ZMQ_FOUND)
+  MARK_AS_ADVANCED(ZMQ_INCLUDE_DIR ZMQ_LIBRARY_DIR )
+ENDIF(ZMQ_FOUND)
+
 

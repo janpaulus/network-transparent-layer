@@ -1,0 +1,15 @@
+<package>
+  <description brief="brics_ntl">
+
+     brics_ntl
+
+  </description>
+  <author>BRSU</author>
+  <license>BSD / LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>https://github.com/janpaulus/network-transparent-layer</url>
+	<rosdep name="boost" />
+  <depend package="zmq"/>
+</package>
+
+

@@ -1,6 +1,7 @@
-PROJECT(BRICS_OODL)
+cmake_minimum_required(VERSION 2.6)
+include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
+rosbuild_init()
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 #Build Type
 SET(CMAKE_BUILD_TYPE Debug)
 SET(CMAKE_VERBOSE_MAKEFILE on)
@@ -12,26 +13,17 @@ SET(LIBRARY_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/lib) #static libraries
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin) #executables
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/lib) #dynamic libraries (plugins)
 
-INCLUDE_DIRECTORIES(${CMAKE_HOME_DIRECTORY})
-SET(DOXYFILE_LATEX "NO")
-SET(DOXYFILE_OUTPUT_DIR ${CMAKE_HOME_DIRECTORY}/doc)
-include(UseDoxygen)
+rosbuild_find_ros_package(zmq)
+
+MESSAGE(STATUS "zmq_PACKAGE_PATH= ${zmq_PACKAGE_PATH}")
+FIND_PACKAGE(zmq REQUIRED)
+MESSAGE(STATUS "ZMQ_LIBRARY_DIR= ${ZMQ_LIBRARY_DIR}")
+
+#SET(DOXYFILE_LATEX "NO")
+#SET(DOXYFILE_OUTPUT_DIR ${CMAKE_HOME_DIRECTORY}/doc)
+#include(UseDoxygen)
 
 
-IF(DEFINED UNICAP_PATH)
-link_directories(${UNICAP_PATH}/lib)
-include_directories(${UNICAP_PATH}/include/unicap)
-MESSAGE(STATUS "UNICAP_PATH= ${UNICAP_PATH}")
-ENDIF(DEFINED UNICAP_PATH)
-
-IF(NOT DEFINED UNICAP_PATH)
-link_directories(${CMAKE_HOME_DIRECTORY}/../openrobots/lib)
-include_directories(${CMAKE_HOME_DIRECTORY}/../openrobots/include/unicap)
-ENDIF(NOT DEFINED UNICAP_PATH)
-
-
-#FIND_PACKAGE(unicap REQUIRED)
-#FIND_PACKAGE(zmq REQUIRED)
 #FIND_PACKAGE(SDL REQUIRED)
 
 #SET(UNICAP_LIB_DIRS ${unicap_LIBRARY_DIRS})
@@ -45,41 +37,24 @@ ENDIF(NOT DEFINED UNICAP_PATH)
 #CFLAGS=`pkg-config --cflags libzmq libunicap sdl` -g -Wall
 #CC = gcc
 
+link_libraries(	
+  zmq
+)
+
 INCLUDE_DIRECTORIES(
-  ${CMAKE_HOME_DIRECTORY}/monocular-camera/include
-  $ENV(ROBOTPKG_BASE)/include
-  /usr/local/include/unicap
-  /usr/include/
-  )
+  ${CMAKE_HOME_DIRECTORY}/include
+  ${ZMQ_INCLUDE_DIR}
+)
 
 LINK_DIRECTORIES(
   ${CMAKE_HOME_DIRECTORY}/lib
-  ${UNICAP_LIB}
+  ${ZMQ_LIBRARY_DIR}
 )
 
-ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(application)
+SET(SOURCES_1 
+src/testPublisher.c
+)
 
+ADD_EXECUTABLE(testpub ${SOURCES_1} )
 
-
-MACRO(INSTALL_HEADERS_WITH_DIRECTORY HEADER_LIST)
-  FOREACH(HEADER ${${HEADER_LIST}})
-    INSTALL(FILES ${HEADER} DESTINATION include/oodl/monocular-camera/)
-  ENDFOREACH(HEADER)
-ENDMACRO(INSTALL_HEADERS_WITH_DIRECTORY)
-
-INSTALL_HEADERS_WITH_DIRECTORY(MONOCULARCAMERA_HEADERS)
-
-#this is for debugging
-#SET(UNICAP_LIB_PATH_ALTERNATE_DEBUG /home/azamat/euprojects/brics/bricsToolchain/workspace/brics/BRICSWP2/BRICS_OODL/monocular-camera/unicap-0.9.5/libunicap/libs)
-#LINK_DIRECTORIES( ${unicap_LIB_PATH_ALTERNATE_DEBUG} )
-
-
-#INCLUDE_DIRECTORIES( ${unicap_INCLUDES} ${zmq_INCLUDES} ${SDL_INCLUDES} generic-monocular-camera/)
-#LINK_DIRECTORIES( ${SDL_LIB_DIRS} ${ZMQ_LIB_DIRS} generic-monocular-camera/ )
-
-#ADD_EXECUTABLE(testCamera ${SOURCES_1} )
-#ADD_EXECUTABLE(testCameraZMQ ${SOURCES_2} )
-#TARGET_LINK_LIBRARIES( testCamera ${SDL_LIBRARY} MonocularCameraCommon unicap )
-#TARGET_LINK_LIBRARIES( testCameraZMQ ${SDL_LIBRARY} MonocularCameraCommon ${zmq_LIBRARIES})
 
