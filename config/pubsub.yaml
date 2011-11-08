@@ -1,10 +1,13 @@
-- connection: connection
-  port: 2342
-  connector: connector
-  interaction: pub-sub 
-  transport:
-    - protocol: tcp
-      hostname: localhost
-      port: 5555 
-  distribution: dsfa
+- connection:
+  - id: connection
+    transport: tcp
+    distribution: broker
+    interaction: pub-sub
+
+  port:
+    - id: port1 
+      synchronization: blocking
+      buffersize: 1024
+      address:  127.0.0.1:5567
+  
 

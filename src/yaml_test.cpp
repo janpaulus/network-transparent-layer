@@ -5,36 +5,35 @@
 #include <vector>
 
 
-struct Transport {
-  std::string protocol;
-  std::string hostname;
-  int port;
+struct Port {
+  std::string id;
+  std::string synchronization;
+  int buffersize;
+  std::string address;
 };
 
 struct Connection {
-  std::string connection;
-  int port;
-  std::string connector;
-  std::string interaction;
-  Transport transport;
+  std::string id;
+  std::string transport;
   std::string distribution;
+  std::string interaction;
 };
 
-void operator >> (const YAML::Node& node, Transport& transport) {
-   node["protocol"] >> transport.protocol;
-   node["hostname"] >> transport.hostname;
-   node["port"] >> transport.port;
+void operator >> (const YAML::Node& node, Port& port) {
+   node["id"] >> port.id;
+   node["synchronization"] >> port.synchronization;
+   node["buffersize"] >> port.buffersize;
+   node["address"] >> port.address;
 }
 
 void operator >> (const YAML::Node& node, Connection& con) {
-   node["connection"] >> con.connection;
-   node["port"] >> con.port;
-   node["connector"] >> con.connector;
-   node["interaction"] >> con.interaction;
+   node["id"] >> con.id;
+   node["tranport"] >> con.transport;
    node["distribution"] >> con.distribution;
-   const YAML::Node& transportnode = node["transport"];
-   for(unsigned i=0; i<transportnode.size(); i++) {
-      transportnode[i] >> con.transport;
+   node["interaction"] >> con.interaction;
+   const YAML::Node& portnode = node["port"];
+   for(unsigned i=0; i<portnode.size(); i++) {
+      portnode[i] >> con.port;
    }
 }
 
