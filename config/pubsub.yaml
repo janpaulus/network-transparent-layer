@@ -1,13 +1,11 @@
-- connection:
-  - id: connection
-    transport: tcp
-    distribution: broker
-    interaction: pub-sub
-
-  port:
-    - id: port1 
+- connection: connection1
+  ports:
+    - id: port1
       synchronization: blocking
       buffersize: 1024
       address:  127.0.0.1:5567
-  
-
+  connector:
+    - id: connector1
+      transport: tcp
+      distribution: broker
+      interaction: pub-sub
