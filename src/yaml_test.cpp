@@ -12,11 +12,13 @@ struct Port {
   std::string address;
 };
 
-struct Connection {
+struct Connector {
   std::string id;
   std::string transport;
   std::string distribution;
   std::string interaction;
+  Port port1;
+  Port port2;
 };
 
 void operator >> (const YAML::Node& node, Port& port) {
@@ -26,14 +28,17 @@ void operator >> (const YAML::Node& node, Port& port) {
    node["address"] >> port.address;
 }
 
-void operator >> (const YAML::Node& node, Connection& con) {
+void operator >> (const YAML::Node& node, Connector& con) {
    node["id"] >> con.id;
-   node["tranport"] >> con.transport;
+   node["transport"] >> con.transport;
    node["distribution"] >> con.distribution;
    node["interaction"] >> con.interaction;
    const YAML::Node& portnode = node["port"];
-   for(unsigned i=0; i<portnode.size(); i++) {
-      portnode[i] >> con.port;
+   if(portnode.size() == 2){
+      portnode[0] >> con.port1;
+      portnode[1] >> con.port2;
+   }else{
+      throw std::runtime_error("Could not parse Connector!");
    }
 }
 
@@ -45,9 +50,9 @@ int main()
    parser.GetNextDocument(doc);
  
    for(unsigned i=0;i<doc.size();i++) {
-      Connection connection;
-      doc[i] >> connection;
-      std::cout << connection.transport.protocol << "\n";
+      Connector connector;
+      doc[i] >> connector;
+      std::cout << connector.port1.synchronization << "\n";
    }
 
    
