@@ -13,21 +13,3 @@
       transport: tcp
       distribution: broker
       interaction: pub-sub
-
-
-- connection: connection2
-  ports:
-    - id: port1
-      synchronization: blocking
-      buffersize: 1024
-      address:  127.0.0.1:5567
-    - id: port3
-      synchronization: nonblocking
-      buffersize: 1024
-      address:  127.0.0.1:5598
-  connector:
-    - id: connector2
-      transport: tcp
-      distribution: broker
-      interaction: pub-sub
-

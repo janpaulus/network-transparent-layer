@@ -55,17 +55,26 @@ LINK_DIRECTORIES(
 
 ADD_EXECUTABLE(testpub 
 src/testPublisher.cpp
-src/YamlConfig.cpp 
+
 )
 
 ADD_EXECUTABLE(testsub
 src/testSubscriber.cpp
+ 
+)
+
+ADD_LIBRARY(zmq_ntl
+src/zmq_ntl.cpp
 src/YamlConfig.cpp 
 )
 
-target_link_libraries(testsub yaml-cpp)
+target_link_libraries(zmq_ntl yaml-cpp)
 
-target_link_libraries(testpub yaml-cpp)
+target_link_libraries(testsub zmq_ntl)
+
+target_link_libraries(testpub zmq_ntl)
+
+
 
 
 
