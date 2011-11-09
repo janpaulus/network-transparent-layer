@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
   while(true){
     ntl.receive(data);
     std::cout << data << std::endl;
+    ntl.send(data);
   }
   
 	return 0;

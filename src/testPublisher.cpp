@@ -11,8 +11,10 @@ int main(int argc, char *argv[])
 {
 	ZMQ_NTL ntl("../config/pubsub.yaml", true);
   
-  while(true)
+  while(true){
   ntl.send("HelloWorld");
+  sleep(1);
+  }
 
 	return 0;
 }

@@ -9,14 +9,17 @@
 
 int main(int argc, char *argv[])
 {
-	ZMQ_NTL ntl("../config/pubsub.yaml", false);
+	ZMQ_NTL ntl("../config/pubsub.yaml", true);
   
-  std::string data;
   while(true){
-    ntl.receive(data);
-    std::cout << data << std::endl;
-  }
+  ntl.send("HelloWorld");
+  std::string data;
+  ntl.receive(data);
+  std::cout << data << std::endl;
   
+  sleep(1);
+  }
+
 	return 0;
 }
 

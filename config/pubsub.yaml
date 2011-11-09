@@ -5,11 +5,11 @@
       buffersize: 1024
       address:  127.0.0.1:5556
     - id: port2
-      synchronization: nonblocking
+      synchronization: blocking
       buffersize: 1024
       address:  127.0.0.1:5556
   connector:
     - id: connector1
-      transport: tcp
-      distribution: broker
+      transport: ipc
+      distribution: peer-to-peer
       interaction: pub-sub

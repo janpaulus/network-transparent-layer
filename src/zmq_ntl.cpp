@@ -29,9 +29,15 @@ public:
 
       context = new zmq::context_t(1);
       zmq_port = new zmq::socket_t(*context, interaction);
-      zmq_port->bind(commStarter.c_str());
+      if (config.connectionVar.connector.distribution == "broker"){
+        zmq_port->connect(commStarter.c_str());
+      }else{
+        zmq_port->bind(commStarter.c_str());
+      }
       std::cout<< "bind : " << commStarter <<std::endl;
       
+      
+    // Partner
     } else {
       
       std::string commPartner;
@@ -80,7 +86,7 @@ public:
 
   bool send(const std::string& data) {
     zmq::message_t message(data.size());
-    memcpy(message.data(), data.c_str(), data.size()+1);
+    memcpy(message.data(), data.c_str(), data.size());
   //  std::cout << (char*)message.data() << std::endl;
     bool returnvalue = zmq_port->send(message);
     return returnvalue;
