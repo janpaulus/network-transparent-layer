@@ -51,15 +51,21 @@ LINK_DIRECTORIES(
   ${ZMQ_LIBRARY_DIR}
 )
 
-SET(SOURCES_1 
-src/testPublisher.c
+
+
+ADD_EXECUTABLE(testpub 
+src/testPublisher.cpp
+src/YamlConfig.cpp 
 )
 
-ADD_EXECUTABLE(testpub ${SOURCES_1} )
+ADD_EXECUTABLE(testsub
+src/testSubscriber.cpp
+src/YamlConfig.cpp 
+)
 
-ADD_EXECUTABLE(yaml_test src/yaml_test.cpp )
+target_link_libraries(testsub yaml-cpp)
 
-target_link_libraries(yaml_test yaml-cpp)
+target_link_libraries(testpub yaml-cpp)
 
 
 

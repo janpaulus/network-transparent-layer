@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "YamlConfig.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -9,9 +10,21 @@ int main(int argc, char *argv[])
 	void *context;
 	void *subscriber;
 
+  YamlConfig config;
+  config.parse("../config/pubsub.yaml");
+  
+  std::string subAdress;
+  subAdress.append(config.connectionVar.connector.transport);
+  subAdress.append("://");
+  subAdress.append(config.connectionVar.ports[1].address);
+  
+  int socket;
+  if(config.connectionVar.connector.interaction == "pub-sub")
+    socket = ZMQ_SUB;
+  
 	context = zmq_init(1);
-	subscriber = zmq_socket(context, ZMQ_SUB);
-	zmq_connect(subscriber, "tcp://*:5556");
+	subscriber = zmq_socket(context, socket);
+	zmq_connect(subscriber, subAdress.c_str());
 	zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, 0, 0);
 	
 	while(1)

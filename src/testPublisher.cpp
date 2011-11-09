@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "YamlConfig.hpp"
 
 
 #define within(num) (int) ((float) num * random () / (RAND_MAX + 1.0))
@@ -13,14 +14,28 @@ int main(int argc, char *argv[])
 	//created a context a publisher type socket
 	void *context;
 	void *publisher;
+  YamlConfig config;
+  config.parse("../config/pubsub.yaml");
+  
+  std::string pubAdress;
+  pubAdress.append(config.connectionVar.connector.transport);
+  pubAdress.append("://");
+  pubAdress.append(config.connectionVar.ports[0].address);
+  
+  std::cout << pubAdress << std::endl;
 	
 //set a seed number
 	srandom ((unsigned)time(NULL));
 	
+  int socket;
+  
+  if(config.connectionVar.connector.interaction == "pub-sub")
+    socket = ZMQ_PUB;
+  
 	//prepare context
 	context = zmq_init(1);
-	publisher = zmq_socket(context, ZMQ_PUB);
-	zmq_bind(publisher, "tcp://*:5556");
+	publisher = zmq_socket(context, socket);
+	zmq_bind(publisher, pubAdress.c_str());
 	zmq_bind(publisher, "ipc:/weather");
 
 	int k = 0;
